@@ -1,0 +1,9 @@
+django
+psycopg2-binary
+python-dotenv
+django-extensions
+ipython
+gunicorn
+pymemcache
+
+requests

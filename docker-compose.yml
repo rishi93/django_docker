@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    container_name: django_postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+  web:
+    build: ./mysite
+    platform: linux/amd64
+    container_name: django_web
+    command: gunicorn --bind 0.0.0.0:8000 --workers 8 mysite.wsgi:application
+    restart: on-failure
+    volumes:
+      - ./mysite:/myapp
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+  cache:
+    image: memcached
+    ports:
+      - "11211:11211"
